@@ -65,20 +65,26 @@ class _InitialScreenState extends State<InitialScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              GradientElevatedButton(
-                text: "Next",
-                onPressed: () {
-                  final result = model.validateFirstLastName();
-                  if (result) {
-                    Navigator.of(context)
-                        .pushNamed(SelectWheelScreen.routeName);
-                  }
-                },
-              ),
+
             ],
           ),
         );
       }),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: GradientElevatedButton(
+          text: "Next",
+          onPressed: () {
+            final model = context.read<VehicleChangeNotifier>();
+            final result = model.validateFirstLastName();
+            if (result) {
+              Navigator.of(context)
+                  .pushNamed(SelectWheelScreen.routeName);
+            }
+          },
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

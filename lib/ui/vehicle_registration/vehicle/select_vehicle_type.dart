@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_date_range_picker/flutter_date_range_picker.dart';
-import 'package:octalogic_test/ui/vehicle_registration/vehicle/select_vehicle_type.dart';
-import 'package:octalogic_test/ui/vehicle_registration/vehicle_change_notifier.dart';
+import 'package:octalogic_test/ui/vehicle_registration/vehicle/vehicle_details_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../widget/button_widget.dart';
+import '../vehicle_change_notifier.dart';
 
-class SelectWheelScreen extends StatefulWidget {
-  static const String routeName = 'select-wheel';
+class SelectVehicleType extends StatefulWidget {
+  static const String routeName = 'select-vehicle-type';
 
-  const SelectWheelScreen({super.key});
+  const SelectVehicleType({super.key});
 
   @override
-  State<SelectWheelScreen> createState() => _SelectWheelScreenState();
+  State<SelectVehicleType> createState() => _SelectVehicleTypeState();
 }
 
-class _SelectWheelScreenState extends State<SelectWheelScreen> {
+class _SelectVehicleTypeState extends State<SelectVehicleType> {
+
   @override
   void initState() {
     super.initState();
@@ -27,39 +27,37 @@ class _SelectWheelScreenState extends State<SelectWheelScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("No Of Wheels"),
         centerTitle: true,
       ),
       body: Consumer<VehicleChangeNotifier>(builder: (context, model, child) {
-        if (model.isLoading)
-          return const Center(child: CircularProgressIndicator());
+        if (model.isLoading) return const Center(child: CircularProgressIndicator());
         return Column(
           children: [
             ListView.builder(
-              itemCount: model.wheelList.length,
+              itemCount: model.vehicleTypeList.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                return RadioListTile<int>(
-                  title: Text("${model.wheelList[index]} wheeler"),
-                  value: model.wheelList[index],
-                  groupValue: model.selectedWheelOption,
+                return RadioListTile<String>(
+                  title: Text(model.vehicleTypeList[index].name),
+                  value: model.vehicleTypeList[index].id,
+                  groupValue: model.selectedVehicle?.id,
                   onChanged: (value) {
-                    model.onWheelSelected(value!);
+                    model.saveSelectedVehicleType(model.vehicleTypeList[index]);
                   },
                 );
               },
             ),
-            if (model.wheelError != null)
+            if (model.vehicleTypeError != null)
               Text(
-                model.wheelError!,
+                model.vehicleTypeError!,
                 style: Theme.of(context)
                     .textTheme
                     .labelSmall
                     ?.copyWith(color: Colors.red),
-              ),
+              )
           ],
         );
       }),
@@ -69,13 +67,15 @@ class _SelectWheelScreenState extends State<SelectWheelScreen> {
           text: "Next",
           onPressed: () {
             final model = context.read<VehicleChangeNotifier>();
-            if (model.onNextWheelPage()) {
-              Navigator.of(context).pushNamed(SelectVehicleType.routeName);
+            if (model.onNextVehicleTypePage()) {
+               Navigator.of(context).pushNamed(VehicleDetailsScreen.routeName);
+
             }
           },
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+
   }
 }

@@ -45,11 +45,11 @@ class ApiClient {
   }
 
 
-  Future<ApiResponse> getVehicleDetails(int id) {
+  Future<ApiResponse> getVehicleDetails(String id) {
     return _get(UrlPath.getVehicleDetails + "$id");
   }
 
-  Future<ApiResponse> getBookingDates(int id) {
+  Future<ApiResponse> getBookingDates(String id) {
     return _get(UrlPath.getBookingDates + "$id");
   }
 

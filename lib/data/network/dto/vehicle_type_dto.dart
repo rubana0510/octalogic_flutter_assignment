@@ -67,19 +67,19 @@ class Vehicle {
     required this.updatedAt,
   });
 
-  final String? id;
-  final String? name;
-  final String? vehicleTypeId;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
+  final String id;
+  final String name;
+  final String vehicleTypeId;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   factory Vehicle.fromJson(Map<String, dynamic> json){
     return Vehicle(
       id: json["id"],
       name: json["name"],
       vehicleTypeId: json["vehicleTypeId"],
-      createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
-      updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
+      createdAt: DateTime.parse(json["createdAt"]),
+      updatedAt: DateTime.parse(json["updatedAt"]),
     );
   }
 
