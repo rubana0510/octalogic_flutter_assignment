@@ -137,7 +137,7 @@ The application integrates with several endpoints:
 - Booking availability API
 - Booking submission API
 
-**API Link**
+**APK Link**
 https://drive.google.com/file/d/1IO-zc72jWxMmNdubtjjSoPrjbntZt24D/view?usp=sharing
 
 **Video Recording Link**
