@@ -33,7 +33,7 @@ class AppState extends State<App> with WidgetsBindingObserver {
         );
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          navigatorKey: navigatorKey,
+         // navigatorKey: navigatorKey,
          onGenerateRoute: (settings) => RouteGenerator.generateRoute(settings),
          initialRoute: InitialScreen.routeName,
           // theme: ThemeData(

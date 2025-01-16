@@ -29,11 +29,12 @@ class _SelectVehicleTypeState extends State<SelectVehicleType> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("No Of Wheels"),
+        title: const Text("Vehicle Type"),
         centerTitle: true,
       ),
       body: Consumer<VehicleChangeNotifier>(builder: (context, model, child) {
         if (model.isLoading) return const Center(child: CircularProgressIndicator());
+
         return Column(
           children: [
             ListView.builder(

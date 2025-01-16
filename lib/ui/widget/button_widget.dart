@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class GradientElevatedButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
+  final bool isSubmitting;
 
   const GradientElevatedButton({
     Key? key,
     required this.text,
     required this.onPressed,
+    this.isSubmitting = false
   }) : super(key: key);
 
   @override
@@ -34,7 +36,9 @@ class GradientElevatedButton extends StatelessWidget {
           child: Container(
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-            child: Text(
+            child:isSubmitting
+                ? CircularProgressIndicator(color: Colors.white)  // Show spinner when submitting
+                :Text(
               text,
               style: TextStyle(
                 color: Colors.white,

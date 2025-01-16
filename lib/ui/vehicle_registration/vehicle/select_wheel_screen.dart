@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_date_range_picker/flutter_date_range_picker.dart';
 import 'package:octalogic_test/ui/vehicle_registration/vehicle/select_vehicle_type.dart';
 import 'package:octalogic_test/ui/vehicle_registration/vehicle_change_notifier.dart';
+import 'package:octalogic_test/ui/widget/error_container.dart';
 import 'package:provider/provider.dart';
 
 import '../../widget/button_widget.dart';
@@ -27,15 +28,21 @@ class _SelectWheelScreenState extends State<SelectWheelScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("No Of Wheels"),
         centerTitle: true,
       ),
       body: Consumer<VehicleChangeNotifier>(builder: (context, model, child) {
-        if (model.isLoading)
+        if (model.isLoading) {
           return const Center(child: CircularProgressIndicator());
+        }
+        if (model.failure != null) {
+          return Center(
+            child: ErrorContainer(
+                text: model.failure!, onPressed: model.fetchVehicleType),
+          );
+        }
         return Column(
           children: [
             ListView.builder(

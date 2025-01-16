@@ -9,8 +9,9 @@ part 'booking_dao.g.dart';
 class BookingDao extends DatabaseAccessor<DbClient> with _$BookingDaoMixin {
   BookingDao(DbClient db) : super(db);
 
-  void initRow(){
-    into(bookingTable).insert(const BookingTableCompanion(id: Value(1)),mode: InsertMode.insertOrReplace);
+  void initRow() {
+    into(bookingTable).insert(const BookingTableCompanion(id: Value(1)),
+        mode: InsertMode.insertOrReplace);
   }
 
   void insertName(int id, String firstName, String lastName) {
@@ -37,5 +38,21 @@ class BookingDao extends DatabaseAccessor<DbClient> with _$BookingDaoMixin {
 
   Stream<List<BookingTableData>> watch() {
     return select(bookingTable).watch();
+  }
+
+  Future<BookingTableData?> getRow(int id) {
+    return (select(bookingTable)..where((tbl) => tbl.id.equals(id))).getSingleOrNull();
+  }
+
+  void clearData(int id) {
+    (update(bookingTable)..where((tbl) => tbl.id.equals(id)))
+        .write(const BookingTableCompanion(
+      vehicleType: Value(null),
+      wheels: Value(null),
+      firstname: Value(null),
+      lastName: Value(null),
+      startDate: Value(null),
+      endDate: Value(null),
+    ));
   }
 }

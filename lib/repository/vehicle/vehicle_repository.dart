@@ -1,4 +1,3 @@
-
 import 'package:flutter_date_range_picker/src/models.dart';
 import 'package:octalogic_test/data/network/dto/booking_date_dto.dart';
 import 'package:octalogic_test/data/network/dto/vehicle_detail_dto.dart';
@@ -8,7 +7,6 @@ import '../../data/db/table/booking_database.dart';
 import '../base_repository.dart';
 
 abstract class VehicleRepository extends BaseRepository {
-
   Future<List<VehicleData>> fetchVehicleType();
 
   Future<Details> fetchVehicleDetails(String id);
@@ -17,7 +15,7 @@ abstract class VehicleRepository extends BaseRepository {
 
   void saveUserDetails(String firstName, String lastName);
 
-  void saveWheel(int selectedWheelOption) ;
+  void saveWheel(int selectedWheelOption);
 
   void saveVehicleType(String selectedVehicle);
 
@@ -25,4 +23,9 @@ abstract class VehicleRepository extends BaseRepository {
 
   Stream<List<BookingTableData>> watch();
 
+  Future<BookingTableData?> getBookingById(int id);
+
+  Future<bool> submitVehicleDetails(Map<String, Object?> data);
+
+  void clearDatabase();
 }

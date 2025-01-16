@@ -6,9 +6,11 @@ import 'package:octalogic_test/data/network/dto/vehicle_detail_dto.dart';
 import 'package:octalogic_test/data/network/dto/vehicle_type_dto.dart';
 import 'package:octalogic_test/repository/vehicle/vehicle_repository.dart';
 
-class VehicleRepositoryImpl extends VehicleRepository {
+import '../../data/network/endpoints.dart';
+import '../../data/network/util/base_response.dart';
 
-  VehicleRepositoryImpl(){
+class VehicleRepositoryImpl extends VehicleRepository {
+  VehicleRepositoryImpl() {
     dbClient.bookingDao.initRow();
   }
 
@@ -20,8 +22,6 @@ class VehicleRepositoryImpl extends VehicleRepository {
 
     return vehicleType;
   }
-
-
 
   @override
   void saveUserDetails(String firstName, String lastName) {
@@ -66,5 +66,22 @@ class VehicleRepositoryImpl extends VehicleRepository {
   @override
   Stream<List<BookingTableData>> watch() {
     return dbClient.bookingDao.watch();
+  }
+
+  @override
+  Future<bool> submitVehicleDetails(Map<String, Object?> data) async {
+    return true;
+  }
+
+
+
+  @override
+  void clearDatabase() {
+    dbClient.bookingDao.clearData(1);
+  }
+
+  @override
+  Future<BookingTableData?> getBookingById(int id) {
+    return dbClient.bookingDao.getRow(id);
   }
 }

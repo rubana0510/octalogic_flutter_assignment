@@ -31,7 +31,6 @@ class _InitialScreenState extends State<InitialScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // First TextField with custom border color
               TextField(
                 controller: model.firstNameController,
                 decoration: InputDecoration(

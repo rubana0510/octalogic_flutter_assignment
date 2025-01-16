@@ -53,6 +53,13 @@ class ApiClient {
     return _get(UrlPath.getBookingDates + "$id");
   }
 
+  Future<ApiResponse> submitVehicleDetails(String id, Map<String, Object?> data) async {
+    return _post(
+      UrlPath.submitDetails + id,
+      map: data,
+    );
+  }
+
   Future<ApiResponse> _get(
     String path, {
     Map<String, dynamic>? queryParameters,

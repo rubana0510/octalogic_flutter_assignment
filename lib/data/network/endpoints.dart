@@ -9,6 +9,8 @@ class UrlPath {
   static const String getVehicleDetails = 'vehicles/';
 
   static const String getBookingDates = 'bookings/';
+
+  static const String submitDetails="submit";
 }
 
 

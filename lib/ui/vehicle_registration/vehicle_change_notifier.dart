@@ -6,6 +6,8 @@ import 'package:octalogic_test/data/network/dto/vehicle_type_dto.dart';
 import 'package:octalogic_test/repository/vehicle/vehicle_repository.dart';
 import 'package:octalogic_test/repository/vehicle/vehicle_repository_impl.dart';
 
+import '../../data/db/table/booking_database.dart';
+
 class VehicleChangeNotifier extends ChangeNotifier {
   bool _isLoading = false;
 
@@ -49,6 +51,14 @@ class VehicleChangeNotifier extends ChangeNotifier {
 
   List<Vehicle> get vehicleTypeList => _vehicleTypeList;
 
+  bool _isSubmitting = false;
+
+  bool get isSubmitting => _isSubmitting;
+
+  bool _isSubmitted = false;
+
+  bool get isSubmitted => _isSubmitted;
+
   VehicleRepository _repository = VehicleRepositoryImpl();
 
   String? firstNameError;
@@ -56,6 +66,7 @@ class VehicleChangeNotifier extends ChangeNotifier {
   String? wheelError;
   String? vehicleTypeError;
   String? dateError;
+  String? errorMessage;
 
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
@@ -70,6 +81,14 @@ class VehicleChangeNotifier extends ChangeNotifier {
 
   List<DateTime> get disabledDates =>
       _disabledDates; // Getter for the disabled dates
+
+  bool _isDatabaseLoading = false;
+
+  bool get isDatabaseLoading => _isLoading;
+
+  String? _databaseError;
+
+  String? get error => _databaseError;
 
   bool validateFirstLastName() {
     firstNameError = null;
@@ -91,12 +110,16 @@ class VehicleChangeNotifier extends ChangeNotifier {
     return false;
   }
 
-  VehicleChangeNotifier(){
+  VehicleChangeNotifier() {
     _repository.watch().listen((event) {
       event.forEach((element) {
         debugPrint("DATABASE:${element.toString()}");
       });
     });
+  }
+
+  Future<BookingTableData?> fetchDatabaseData() async {
+    return await _repository.getBookingById(1);
   }
 
   void onWheelSelected(int value) {
@@ -111,7 +134,6 @@ class VehicleChangeNotifier extends ChangeNotifier {
 
     notifyListeners();
   }
-
 
   void addVehicleTypeList() {
     _vehicleTypeList.clear();
@@ -135,25 +157,38 @@ class VehicleChangeNotifier extends ChangeNotifier {
     return true;
   }
 
-  bool onSubmitClick(){
-    if(selectedDateRange==null){
+  bool onSubmitClick() {
+    if (selectedDateRange == null) {
       dateError = "Please Select Dates";
       notifyListeners();
       return false;
     }
+
+    dateError = null;
+    notifyListeners();
+
     _repository.saveDateRange(selectedDateRange!);
+    submitVehicleDetails();
+
+    _isSubmitted = true;
+    notifyListeners();
     return true;
   }
 
-  clearData(){
-    selectedVehicle=null;
+  void resetSubmissionStatus() {
+    _isSubmitted = false;
+    selectedVehicle = null;
+    selectedDateRange = null;
+    selectedWheelOption = null;
+    firstNameController.clear();
+    lastNameController.clear();
+    _repository.clearDatabase();
     notifyListeners();
   }
 
-
   bool onNextVehicleTypePage() {
     if (selectedVehicle == null) {
-      wheelError = "Please Select One of the Options";
+      vehicleTypeError = "Please Select One of the Options";
       notifyListeners();
       return false;
     }
@@ -274,6 +309,45 @@ class VehicleChangeNotifier extends ChangeNotifier {
     } finally {
       _isbookingLoading = false;
       notifyListeners();
+    }
+  }
+
+  void resetErrors() {
+    errorMessage = null;
+    notifyListeners();
+  }
+
+  Future<bool> submitVehicleDetails() async {
+    resetErrors();
+
+    _isSubmitting = true;
+    _isSubmitted = false;
+    notifyListeners();
+
+    try {
+      final data = {
+        "firstName": firstNameController.text,
+        "lastName": lastNameController.text,
+        "wheel": selectedWheelOption,
+        "vehicleType": selectedVehicle?.vehicleTypeId,
+        "startDate": selectedDateRange?.start,
+        "endDate": selectedDateRange?.end,
+      };
+
+      await Future.delayed(Duration(seconds: 1));
+
+      _isSubmitting = false;
+      _isSubmitted = true;
+      errorMessage = null;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _isSubmitting = false;
+      _isSubmitted = false;
+      errorMessage = "Submission failed. Please try again.";
+      notifyListeners();
+
+      return false;
     }
   }
 }
